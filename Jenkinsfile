@@ -31,25 +31,6 @@ pipeline {
                 sh 'echo "Running unit and integration tests..." > unit-integration-tests.log'
                 sh 'echo "Tests successfully completed." >> unit-integration-tests.log'
             }
-            post {
-                always {
-                    script {
-                        def buildStatus = currentBuild.result ?: 'SUCCESS'
-                        def subject = "${env.JOB_NAME} - Build ${env.BUILD_NUMBER} - Unit and Integration Tests ${buildStatus}"
-                        def body = """
-                        Unit and Integration Tests Status: ${buildStatus}
-                        Job: ${env.JOB_NAME}
-                        Build Number: ${env.BUILD_NUMBER}
-                        """
-                        emailext (
-                            to: 'h.zafar112233@gmail.com',
-                            subject: subject,
-                            body: body,
-                            attachmentsPattern: 'unit-integration-tests.log'
-                        )
-                    }
-                }
-            }
         }
 
         stage('Code Analysis') {
